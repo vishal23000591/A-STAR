@@ -1,8 +1,31 @@
 <h1>ExpNo 4 : Implement A* search algorithm for a Graph</h1> 
-<h3>Name:       </h3>
-<h3>Register Number:           </h3>
+<h3>Name:Vishal S  </h3>
+<h3>Register Number: 212223110063     </h3>
 <H3>Aim:</H3>
 <p>To ImplementA * Search algorithm for a Graph using Python 3.</p>
+<h3>Theory:</h3>
+<p>Breadth-First Traversal (or Search) for a graph is like the Breadth-First Traversal of a tree.
+The only catch here is that, unlike trees, graphs may contain cycles so that we may come to the same node again. To avoid processing a node more than once, we divide the vertices into two categories:
+<ol><li>Visited</li>
+<li>Not Visited</li></ol>
+</p>
+<p>A Boolean visited array is used to mark the visited vertices. For simplicity, it is assumed that all vertices are reachable from the starting vertex. BFS uses a queue data structure for traversal.</p>
+<p><strong>How does BFS work?</strong><br>
+  Starting from the root, all the nodes at a particular level are visited first, and then the next level nodes are traversed until all the nodes are visited.
+To do this, a queue is used. All the adjacent unvisited nodes of the current level are pushed into the queue, and the current-level nodes are marked visited and popped from the queue.
+Illustration:
+Let us understand the working of the algorithm with the help of the following example.
+Step1: Initially queue and visited arrays are empty.
+</p>
+<img width="875" height="320" alt="image" src="https://github.com/user-attachments/assets/e0111719-3496-4734-871a-b0a0a8110d75" />
+<img width="892" height="371" alt="image" src="https://github.com/user-attachments/assets/5a6c5913-89df-4534-8f6a-3ee8e923b5df" />
+<img width="889" height="394" alt="image" src="https://github.com/user-attachments/assets/3c4ed647-93e6-43a3-9847-3e9d23c5bf04" />
+<img width="877" height="368" alt="image" src="https://github.com/user-attachments/assets/b3b75e89-0a50-4465-a008-bd76c6e2582f" />
+<img width="888" height="371" alt="image" src="https://github.com/user-attachments/assets/ea2c223f-90b3-45f5-b506-290f54ff4974" />
+<img width="882" height="382" alt="image" src="https://github.com/user-attachments/assets/ccf40a9c-a625-4df0-ba31-25d03a4b3ba7" />
+<img width="914" height="462" alt="image" src="https://github.com/user-attachments/assets/2a31ece4-1185-4caf-86ef-b3f4bfadd6c0" />
+
+
 <H3>Algorithm:</H3>
 
 ``````
@@ -49,6 +72,78 @@
     end (while loop)
 
 ``````
+**PROGRAM**
+```
+          
+from collections import defaultdict
+H_dist ={}
+def aStarAlgo(start_node, stop_node):
+    open_set = set(start_node)
+    closed_set = set()
+    g = {}  
+    parents = {}   
+    g[start_node] = 0
+    parents[start_node] = start_node
+    while len(open_set) > 0:
+        n = None
+        for v in open_set:
+            if n == None or g[v] + heuristic(v) < g[n] + heuristic(n):
+                n = v
+        if n == stop_node or Graph_nodes[n] == None:
+            pass
+        else:
+            for (m, weight) in get_neighbors(n):
+                if m not in open_set and m not in closed_set:
+                    open_set.add(m)
+                    parents[m] = n
+                    g[m] = g[n] + weight
+                else:
+                    if g[m] > g[n] + weight:
+                        g[m] = g[n] + weight
+                        parents[m] = n
+                        if m in closed_set:
+                            closed_set.remove(m)
+                            open_set.add(m)
+        if n == None:
+            print("Path does not exist!")
+            return None
+        if n == stop_node:
+            path = []
+            while parents[n] != n:
+                path.append(n)
+                n = parents[n]
+            path.append(start_node)
+            path.reverse()
+            print('Path found: {}'.format(path))
+            return path
+        open_set.remove(n)
+        closed_set.add(n)
+    print('Path does not exist!')
+    return None
+def get_neighbors(v):
+    if v in Graph_nodes:
+        return Graph_nodes[v]
+    else:
+        return None
+def heuristic(n):
+    return H_dist[n]
+graph = defaultdict(list)
+n,e = map(int,input().split())
+for i in range(e):
+    u,v,cost = map(str,input().split())
+    t=(v,int(cost))
+    graph[u].append(t)
+    t1=(u,int(cost))
+    graph[v].append(t1)
+for i in range(n):
+    node,h=map(str,input().split())
+    H_dist[node]=int(h)
+Graph_nodes=graph
+start=input()
+goal=input()
+aStarAlgo(start, goal)
+    
+```
 
 <hr>
 <h2>Sample Graph I</h2>
